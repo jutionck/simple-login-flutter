@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:simple_flutter_login/model/error_model.dart';
+import 'package:simple_flutter_login/model/login_model.dart';
+import 'package:simple_flutter_login/utils/api_util.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -125,10 +131,20 @@ class _LoginScreenState extends State<LoginScreen> {
     return true;
   }
 
-  login() {
+  login() async {
     setState(() {
       isLoading = true;
     });
-    print('Login $email $password');
+
+    final response = await http.get(ApiUtil.baseUrl("login.php?email=$email&password=$password"));
+
+    if (response.statusCode == 200) {
+      var login = LoginModel.fromJson(jsonDecode(response.body));
+      Fluttertoast.showToast(msg: login.message);
+      print("Response ${login.data.toString()}");
+    } else {
+      var error = ErrorModel.fromJson(jsonDecode(response.body));
+      Fluttertoast.showToast(msg: error.message);
+    }
   }
 }
