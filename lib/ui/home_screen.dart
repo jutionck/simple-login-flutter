@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               padding: EdgeInsets.all(10.0),
               child: Text(
-                'Login as',
+                'Login as $name',
                 style: TextStyle(fontSize: 16),
               ),
             ),
