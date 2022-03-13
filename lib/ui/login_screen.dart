@@ -5,9 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_flutter_login/model/error_model.dart';
 import 'package:simple_flutter_login/model/login_model.dart';
+import 'package:simple_flutter_login/ui/home_screen.dart';
 import 'package:simple_flutter_login/ui/register_screen.dart';
 import 'package:simple_flutter_login/utils/api_util.dart';
-import 'package:simple_flutter_login/utils/pref_util.dart';
+import 'package:simple_flutter_login/preferences/pref_manager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -145,7 +146,10 @@ class _LoginScreenState extends State<LoginScreen> {
       Fluttertoast.showToast(msg: login.message);
       print("Response ${login.data.toString()}");
 
-      PrefUtil.setIsLogin(1);
+      PrefManager.setIsLogin(1);
+      PrefManager.setUserData(response.body);
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
 
     } else {
       var error = ErrorModel.fromJson(jsonDecode(response.body));

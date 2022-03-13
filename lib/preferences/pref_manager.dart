@@ -1,6 +1,6 @@
 import 'package:simple_flutter_login/preferences/pref_instance.dart';
 
-class PrefUtil {
+class PrefManager {
   static Future<int> get getIsLogin => PrefInstance.getInt(PrefName.isLogin);
   static Future setIsLogin(int value) => PrefInstance.setInt(PrefName.isLogin, value);
 
