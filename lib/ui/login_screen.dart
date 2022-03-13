@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
-  bool isLoggedIn = false;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,19 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              Container(
-                  width: double.infinity,
-                  child: MaterialButton(
-                    onPressed: () {},
-                    height: 50,
-                    color: Colors.blueAccent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      'Sign In',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )),
+              isLoading ? setLoading() : setButton(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -95,5 +84,51 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Widget setButton() {
+    return Container(
+        width: double.infinity,
+        child: MaterialButton(
+          onPressed: () {
+            if (isRequired()) login();
+          },
+          height: 50,
+          color: Colors.blueAccent,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            'Sign In',
+            style: TextStyle(color: Colors.white),
+          ),
+        ));
+  }
+
+  Widget setLoading() {
+    return Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Container(
+          width: 50,
+          height: 50,
+          child: CircularProgressIndicator(),
+        ));
+  }
+
+  bool isRequired() {
+    if (email.isEmpty) {
+      Fluttertoast.showToast(msg: "Email is required");
+      return false;
+    } else if (password.isEmpty) {
+      Fluttertoast.showToast(msg: "Password is required");
+      return false;
+    }
+    return true;
+  }
+
+  login() {
+    setState(() {
+      isLoading = true;
+    });
+    print('Login $email $password');
   }
 }
