@@ -7,6 +7,7 @@ import 'package:simple_flutter_login/model/error_model.dart';
 import 'package:simple_flutter_login/model/login_model.dart';
 import 'package:simple_flutter_login/ui/register_screen.dart';
 import 'package:simple_flutter_login/utils/api_util.dart';
+import 'package:simple_flutter_login/utils/pref_util.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -135,9 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   login() async {
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
     final response = await http.get(ApiUtil.baseUrl("login.php?email=$email&password=$password"));
 
@@ -145,6 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
       var login = LoginModel.fromJson(jsonDecode(response.body));
       Fluttertoast.showToast(msg: login.message);
       print("Response ${login.data.toString()}");
+
+      PrefUtil.setIsLogin(1);
+
     } else {
       var error = ErrorModel.fromJson(jsonDecode(response.body));
       Fluttertoast.showToast(msg: error.message);

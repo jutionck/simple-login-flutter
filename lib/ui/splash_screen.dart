@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:simple_flutter_login/ui/home_screen.dart';
 import 'package:simple_flutter_login/ui/login_screen.dart';
+import 'package:simple_flutter_login/utils/pref_util.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    PrefUtil.getIsLogin.then((value) => {
 
-    Future.delayed(Duration(seconds: 3) , () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginScreen())
-      );
-    });
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) {
+                  if(value == 1) return HomeScreen();
+                  else return LoginScreen();
+                })
+            );
+          })
+        });
 
     return Scaffold(
       backgroundColor: Colors.white,
